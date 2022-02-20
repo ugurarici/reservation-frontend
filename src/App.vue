@@ -28,6 +28,10 @@
           <v-icon>mdi-information</v-icon>
           <span class="ml-2">About</span>
         </v-btn>
+        <v-btn to="/form" class="ml-2" text>
+          <v-icon>mdi-calendar</v-icon>
+          <span class="ml-2">Reservation</span>
+        </v-btn>
       </div>
 
       <v-spacer></v-spacer>
