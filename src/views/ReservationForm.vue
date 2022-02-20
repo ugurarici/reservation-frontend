@@ -77,7 +77,9 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn color="primary" text @click="reserve"> Reserve </v-btn>
+          <v-btn color="primary" text @click="createReservation">
+            Reserve
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-container>
@@ -85,6 +87,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -101,16 +105,40 @@ export default {
     };
   },
   methods: {
-    reserve() {
-      this.loading = true;
-    },
     fetchAvailableHoursOfDate() {
+      this.selectedHour = 0;
       this.loading = true;
-      fetch("http://localhost/api/reservations/create?date=" + this.date)
-        .then((response) => response.json())
-        .then((data) => {
-          this.hours = data;
+      axios
+        .get("http://localhost/api/reservations/create?date=" + this.date)
+        .then((response) => {
+          this.hours = response.data;
           this.loading = false;
+        });
+    },
+    createReservation() {
+      this.loading = true;
+      axios
+        .post("http://localhost/api/reservations", {
+          name: this.name,
+          email: this.email,
+          phone: this.phone,
+          reservation_at: this.datetime,
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.name = null;
+          this.email = null;
+          this.phone = null;
+          this.selectedHour = 0;
+          this.fetchAvailableHoursOfDate();
+          this.loading = false;
+          alert("Reservation succeded");
+        })
+        .catch((error) => {
+          console.error(error);
+          console.log(error.response.data.message);
+          this.loading = false;
+          alert("Try again :( \n" + error.response.data.message);
         });
     },
   },
