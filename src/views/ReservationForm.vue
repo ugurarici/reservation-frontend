@@ -1,6 +1,11 @@
 <template>
   <div>
     <v-container>
+      <v-alert type="success" v-if="reservationSucceded">
+        Reservation succeded
+        {{ new Date(lastReservation.reservation_at) }}
+      </v-alert>
+
       <v-card :loading="loading" max-width="350">
         <template slot="progress">
           <v-progress-linear
@@ -64,6 +69,7 @@
             ></v-date-picker>
           </v-menu>
 
+          <!-- TODO: Show a warning if selected date does not have any available reservation hours -->
           <v-chip-group
             class="my-4"
             v-model="selectedHour"
@@ -102,6 +108,8 @@ export default {
       loading: false,
       hours: [],
       selectedHour: 0,
+      reservationSucceded: false,
+      lastReservation: null,
     };
   },
   methods: {
@@ -112,6 +120,10 @@ export default {
         .get("http://localhost/api/reservations/create?date=" + this.date)
         .then((response) => {
           this.hours = response.data;
+          this.loading = false;
+        })
+        .catch((error) => {
+          this.$store.commit("addError", error.message);
           this.loading = false;
         });
     },
@@ -125,20 +137,25 @@ export default {
           reservation_at: this.datetime,
         })
         .then((response) => {
-          console.log(response.data);
+          this.lastReservation = response.data;
           this.name = null;
           this.email = null;
           this.phone = null;
           this.selectedHour = 0;
           this.fetchAvailableHoursOfDate();
           this.loading = false;
-          alert("Reservation succeded");
+          this.reservationSucceded = true;
         })
         .catch((error) => {
-          console.error(error);
-          console.log(error.response.data.message);
           this.loading = false;
-          alert("Try again :( \n" + error.response.data.message);
+          if (error.response) {
+            this.$store.commit(
+              "addError",
+              "Try again :( \n" + error.response.data.message
+            );
+          } else {
+            this.$store.commit("addError", error.message);
+          }
         });
     },
   },
