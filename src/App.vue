@@ -32,6 +32,16 @@
           <v-icon>mdi-calendar</v-icon>
           <span class="ml-2">Reservation</span>
         </v-btn>
+
+        <v-btn to="/register" class="ml-2" text v-if="!loggedInUser">
+          <v-icon>mdi-account-plus</v-icon>
+          <span class="ml-2">Register</span>
+        </v-btn>
+
+        <v-btn class="ml-2" text v-if="loggedInUser">
+          <v-icon>mdi-account</v-icon>
+          <span class="ml-2">{{ loggedInUser.name }}</span>
+        </v-btn>
       </div>
 
       <v-spacer></v-spacer>
@@ -110,7 +120,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["errors"]),
+    ...mapState(["errors", "loggedInUser"]),
   },
 
   watch: {

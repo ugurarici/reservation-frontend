@@ -6,6 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     errors: [],
+    loggedInUser: null,
   },
   mutations: {
     addError(state, error) {
@@ -13,6 +14,9 @@ export default new Vuex.Store({
     },
     deleteError(state, errorIndex) {
       state.errors.splice(errorIndex, 1);
+    },
+    setLoggedInUser(state, user) {
+      state.loggedInUser = user;
     },
   },
   actions: {},
