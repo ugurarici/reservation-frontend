@@ -38,6 +38,11 @@
           <span class="ml-2">Register</span>
         </v-btn>
 
+        <v-btn to="/login" class="ml-2" text v-if="!loggedInUser">
+          <v-icon>mdi-account</v-icon>
+          <span class="ml-2">Login</span>
+        </v-btn>
+
         <v-btn class="ml-2" text v-if="loggedInUser">
           <v-icon>mdi-account</v-icon>
           <span class="ml-2">{{ loggedInUser.name }}</span>

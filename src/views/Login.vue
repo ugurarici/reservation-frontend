@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-form ref="form" @submit.prevent="register">
+    <v-form ref="form" @submit.prevent="login">
       <v-card :loading="loading" max-width="350">
         <template slot="progress">
           <v-progress-linear
@@ -11,10 +11,8 @@
           ></v-progress-linear>
         </template>
 
-        <v-card-title>Registration</v-card-title>
+        <v-card-title>Login</v-card-title>
         <v-card-text>
-          <v-text-field v-model="name" label="Name" required></v-text-field>
-
           <v-text-field
             v-model="email"
             type="email"
@@ -28,17 +26,10 @@
             type="password"
             required
           ></v-text-field>
-
-          <v-text-field
-            v-model="password_confirmation"
-            label="Password (confirmation)"
-            type="password"
-            required
-          ></v-text-field>
         </v-card-text>
 
         <v-card-actions>
-          <v-btn type="submit" color="primary" class="mr-4"> Register </v-btn>
+          <v-btn type="submit" color="primary" class="mr-4"> Login </v-btn>
         </v-card-actions>
       </v-card>
     </v-form>
@@ -51,23 +42,19 @@ import axios from "axios";
 export default {
   data() {
     return {
-      name: null,
       email: null,
       password: null,
-      password_confirmation: null,
       loading: false,
     };
   },
 
   methods: {
-    register() {
+    login() {
       this.loading = true;
       axios
-        .post("http://localhost/api/register", {
-          name: this.name,
+        .post("http://localhost/api/login", {
           email: this.email,
           password: this.password,
-          password_confirmation: this.password_confirmation,
         })
         .then((response) => {
           this.$store.commit("setLoggedInUser", response.data);
@@ -82,7 +69,6 @@ export default {
         })
         .then(() => {
           this.loading = false;
-          console.log("Nolursa olsun");
         });
     },
   },
