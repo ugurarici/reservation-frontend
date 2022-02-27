@@ -6,88 +6,94 @@
         {{ new Date(lastReservation.reservation_at) }}
       </v-alert>
 
-      <v-card :loading="loading" max-width="350">
-        <template slot="progress">
-          <v-progress-linear
-            color="primary"
-            height="10"
-            indeterminate
-            absolute
-          ></v-progress-linear>
-        </template>
-
-        <v-card-title>Reservation</v-card-title>
-
-        <v-card-text>
-          <v-text-field
-            prepend-icon="mdi-account"
-            label="Name Surname"
-            hide-details="auto"
-            class="mb-4"
-            v-model="name"
-          ></v-text-field>
-
-          <v-text-field
-            prepend-icon="mdi-mail"
-            label="E-Mail"
-            hide-details="auto"
-            class="my-4"
-            v-model="email"
-          ></v-text-field>
-
-          <v-text-field
-            prepend-icon="mdi-phone"
-            label="Phone"
-            hide-details="auto"
-            class="my-4"
-            v-model="phone"
-          ></v-text-field>
-
-          <v-menu
-            v-model="datePickerContainer"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            transition="scale-transition"
-            offset-y
-            min-width="auto"
-            class="my-4"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                v-model="date"
-                label="Select date"
-                prepend-icon="mdi-calendar"
-                readonly
-                v-bind="attrs"
-                v-on="on"
-              ></v-text-field>
+      <v-row>
+        <v-col cols="12" sm="4">
+          <v-card :loading="loading">
+            <template slot="progress">
+              <v-progress-linear
+                color="primary"
+                height="10"
+                indeterminate
+                absolute
+              ></v-progress-linear>
             </template>
-            <v-date-picker
-              v-model="date"
-              @input="datePickerContainer = false"
-              :min="mindate"
-            ></v-date-picker>
-          </v-menu>
 
-          <!-- TODO: Show a warning if selected date does not have any available reservation hours -->
-          <v-chip-group
-            class="my-4"
-            v-model="selectedHour"
-            active-class="primary accent-4 white--text"
-            column
-          >
-            <v-chip v-for="(hour, key) in availableHours" :key="key">{{
-              hour
-            }}</v-chip>
-          </v-chip-group>
-        </v-card-text>
+            <v-card-title>Reservation</v-card-title>
 
-        <v-card-actions>
-          <v-btn color="primary" text @click="createReservation">
-            Reserve
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+            <v-card-text>
+              <v-text-field
+                prepend-icon="mdi-account"
+                label="Name Surname"
+                hide-details="auto"
+                class="mb-4"
+                v-model="name"
+              ></v-text-field>
+
+              <v-text-field
+                prepend-icon="mdi-mail"
+                label="E-Mail"
+                hide-details="auto"
+                class="my-4"
+                v-model="email"
+              ></v-text-field>
+
+              <v-text-field
+                prepend-icon="mdi-phone"
+                label="Phone"
+                hide-details="auto"
+                class="my-4"
+                v-model="phone"
+              ></v-text-field>
+
+              <v-menu
+                v-model="datePickerContainer"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+                class="my-4"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="date"
+                    label="Select date"
+                    prepend-icon="mdi-calendar"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  v-model="date"
+                  @input="datePickerContainer = false"
+                  :min="mindate"
+                ></v-date-picker>
+              </v-menu>
+
+              <!-- TODO: Show a warning if selected date does not have any available reservation hours -->
+              <v-chip-group
+                class="my-4"
+                v-model="selectedHour"
+                active-class="primary accent-4 white--text"
+                column
+              >
+                <v-chip v-for="(hour, key) in availableHours" :key="key">{{
+                  hour
+                }}</v-chip>
+              </v-chip-group>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-btn color="primary" text @click="createReservation">
+                Reserve
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+
+        <v-col cols="12" sm="8"> listesi </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>

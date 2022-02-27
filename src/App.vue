@@ -36,12 +36,12 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn class="ml-2" text v-if="loggedInUser">
+      <v-btn to="/profile" class="ml-2" text v-if="loggedInUser">
         <v-icon>mdi-account</v-icon>
         <span class="ml-2">{{ loggedInUser.name }}</span>
       </v-btn>
 
-      <v-btn @click.prevent="logout" class="ml-2" text v-if="loggedInUser">
+      <v-btn to="/logout" class="ml-2" text v-if="loggedInUser">
         <v-icon>mdi-account</v-icon>
         <span class="ml-2">Logout</span>
       </v-btn>
@@ -81,13 +81,12 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "App",
   methods: {
     ...mapMutations(["deleteError"]),
-    ...mapActions(["logout"]),
   },
   computed: {
     ...mapState(["errors", "loggedInUser"]),

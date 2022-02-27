@@ -4,6 +4,8 @@ import Home from "../views/Home.vue";
 import ReservationForm from "../views/ReservationForm.vue";
 import Register from "../views/Register.vue";
 import Login from "../views/Login.vue";
+import Logout from "../views/Logout.vue";
+import Profile from "../views/Profile.vue";
 
 Vue.use(VueRouter);
 
@@ -35,6 +37,16 @@ const routes = [
     path: "/login",
     name: "Login",
     component: Login,
+  },
+  {
+    path: "/logout",
+    name: "Logout",
+    component: Logout,
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: Profile,
   },
 ];
 
