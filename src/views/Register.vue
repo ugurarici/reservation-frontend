@@ -47,6 +47,7 @@
 
 <script>
 import axios from "axios";
+import { mapActions, mapMutations } from "vuex";
 
 export default {
   data() {
@@ -60,6 +61,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(["redirectAfterLogin"]),
+    ...mapMutations(["setLoggedInUser", "addError"]),
     register() {
       this.loading = true;
       axios
@@ -70,19 +73,18 @@ export default {
           password_confirmation: this.password_confirmation,
         })
         .then((response) => {
-          this.$store.commit("setLoggedInUser", response.data);
-          this.$router.push("/");
+          this.setLoggedInUser(response.data);
+          this.redirectAfterLogin();
         })
         .catch((error) => {
           if (error.response) {
-            this.$store.commit("addError", error.response.data.message);
+            this.addError(error.response.data.message);
           } else {
-            this.$store.commit("addError", error.message);
+            this.addError(error.message);
           }
         })
         .then(() => {
           this.loading = false;
-          console.log("Nolursa olsun");
         });
     },
   },

@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import VuexPersistence from "vuex-persist";
 import axios from "axios";
+import router from "../router";
 
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
@@ -49,6 +50,16 @@ export default new Vuex.Store({
         .catch(() => {
           commit("deleteLoggedInUser");
         });
+    },
+    redirectAfterLogin({ commit, state }) {
+      //  daha önceden gitmeye çalıştığı bir sayfa varsa oraya git, yoksa ana sayfaya git
+      if (state.redirectAfterLogin) {
+        let toPath = state.redirectAfterLogin;
+        commit("clearRedirectAfterLogin");
+        router.push(toPath);
+      } else {
+        router.push("/");
+      }
     },
   },
   modules: {},
