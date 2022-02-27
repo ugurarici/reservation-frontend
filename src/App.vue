@@ -32,60 +32,31 @@
           <v-icon>mdi-calendar</v-icon>
           <span class="ml-2">Reservation</span>
         </v-btn>
-
-        <v-btn to="/register" class="ml-2" text v-if="!loggedInUser">
-          <v-icon>mdi-account-plus</v-icon>
-          <span class="ml-2">Register</span>
-        </v-btn>
-
-        <v-btn to="/login" class="ml-2" text v-if="!loggedInUser">
-          <v-icon>mdi-account</v-icon>
-          <span class="ml-2">Login</span>
-        </v-btn>
-
-        <v-btn class="ml-2" text v-if="loggedInUser">
-          <v-icon>mdi-account</v-icon>
-          <span class="ml-2">{{ loggedInUser.name }}</span>
-        </v-btn>
       </div>
 
       <v-spacer></v-spacer>
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
+      <v-btn class="ml-2" text v-if="loggedInUser">
+        <v-icon>mdi-account</v-icon>
+        <span class="ml-2">{{ loggedInUser.name }}</span>
       </v-btn>
 
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-btn @click.prevent="logout" class="ml-2" text v-if="loggedInUser">
+        <v-icon>mdi-account</v-icon>
+        <span class="ml-2">Logout</span>
+      </v-btn>
+
+      <v-btn to="/register" class="ml-2" text v-if="!loggedInUser">
+        <v-icon>mdi-account-plus</v-icon>
+        <span class="ml-2">Register</span>
+      </v-btn>
+
+      <v-btn to="/login" class="ml-2" text v-if="!loggedInUser">
+        <v-icon>mdi-account</v-icon>
+        <span class="ml-2">Login</span>
+      </v-btn>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" absolute bottom right temporary>
-      <v-list nav dense>
-        <v-list-item-group
-          v-model="group"
-          active-class="deep-purple--text text--accent-4"
-        >
-          <v-list-item>
-            <v-list-item-title>Foo</v-list-item-title>
-          </v-list-item>
 
-          <v-list-item>
-            <v-list-item-title>Bar</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-title>Fizz</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-title>Buzz</v-list-item-title>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
-    </v-navigation-drawer>
     <v-main>
       <v-container>
         <v-alert
@@ -110,28 +81,16 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "App",
-
-  data: () => ({
-    drawer: false,
-    group: null,
-  }),
-
   methods: {
     ...mapMutations(["deleteError"]),
+    ...mapActions(["logout"]),
   },
-
   computed: {
     ...mapState(["errors", "loggedInUser"]),
-  },
-
-  watch: {
-    group() {
-      this.drawer = false;
-    },
   },
 };
 </script>
