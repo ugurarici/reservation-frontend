@@ -5,7 +5,10 @@ import axios from "axios";
 
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
-  reducer: (state) => ({ loggedInUser: state.loggedInUser }),
+  reducer: (state) => ({
+    loggedInUser: state.loggedInUser,
+    redirectAfterLogin: state.redirectAfterLogin,
+  }),
 });
 
 Vue.use(Vuex);
@@ -14,6 +17,7 @@ export default new Vuex.Store({
   state: {
     errors: [],
     loggedInUser: null,
+    redirectAfterLogin: null,
   },
   mutations: {
     addError(state, error) {
@@ -27,6 +31,12 @@ export default new Vuex.Store({
     },
     deleteLoggedInUser(state) {
       state.loggedInUser = null;
+    },
+    setRedirectAfterLogin(state, path) {
+      state.redirectAfterLogin = path;
+    },
+    clearRedirectAfterLogin(state) {
+      state.redirectAfterLogin = null;
     },
   },
   actions: {

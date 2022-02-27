@@ -38,6 +38,7 @@
 
 <script>
 import axios from "axios";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   data() {
@@ -47,8 +48,11 @@ export default {
       loading: false,
     };
   },
-
+  computed: {
+    ...mapState(["redirectAfterLogin"]),
+  },
   methods: {
+    ...mapMutations(["setLoggedInUser", "addError", "clearRedirectAfterLogin"]),
     login() {
       this.loading = true;
       axios
@@ -57,14 +61,21 @@ export default {
           password: this.password,
         })
         .then((response) => {
-          this.$store.commit("setLoggedInUser", response.data);
-          this.$router.push("/");
+          this.setLoggedInUser(response.data);
+          //  daha önceden gitmeye çalıştığı bir sayfa varsa oraya git, yoksa ana sayfaya git
+          if (this.redirectAfterLogin) {
+            let toPath = this.redirectAfterLogin;
+            this.clearRedirectAfterLogin();
+            this.$router.push(toPath);
+          } else {
+            this.$router.push("/");
+          }
         })
         .catch((error) => {
           if (error.response) {
-            this.$store.commit("addError", error.response.data.message);
+            this.addError(error.response.data.message);
           } else {
-            this.$store.commit("addError", error.message);
+            this.addError(error.message);
           }
         })
         .then(() => {
