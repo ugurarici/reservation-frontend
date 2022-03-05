@@ -10,11 +10,18 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import axios from "axios";
 
 export default {
-  computed: {
-    ...mapState({ user: "loggedInUser" }),
+  data() {
+    return {
+      user: null,
+    };
+  },
+  beforeMount() {
+    axios
+      .get("http://localhost/api/me")
+      .then((response) => (this.user = response.data));
   },
 };
 </script>
