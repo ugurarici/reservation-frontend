@@ -2,6 +2,7 @@
   <v-container>
     <v-card v-if="user">
       <v-card-title>{{ user.name }}</v-card-title>
+      <v-card-text> Registered {{ user.created_at.fromNow() }} </v-card-text>
       <v-card-actions>
         <v-btn color="red" text to="/logout"> Logout </v-btn>
       </v-card-actions>

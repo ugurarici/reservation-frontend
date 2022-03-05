@@ -2,14 +2,10 @@ import Vue from "vue";
 import Vuex from "vuex";
 import VuexPersistence from "vuex-persist";
 import axios from "../api";
-import { handleDates } from "../helpers/handledates";
 import router from "../router";
 
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
-  restoreState: (key, storage) => {
-    return handleDates(JSON.parse(storage.getItem(key)));
-  },
   reducer: (state) => ({
     loggedInUser: state.loggedInUser,
     redirectAfterLogin: state.redirectAfterLogin,

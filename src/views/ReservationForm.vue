@@ -2,8 +2,8 @@
   <div>
     <v-container>
       <v-alert type="success" v-if="reservationSucceded">
-        Reservation succeded
-        {{ lastReservation.reservation_at }}
+        Reservation succeded!<br />
+        Your reservation is {{ lastReservation.reservation_at.fromNow() }}
       </v-alert>
 
       <v-row>

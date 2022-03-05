@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const isoDateFormat =
   /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)((-(\d{2}):(\d{2})|Z)?)$/;
 
@@ -10,7 +12,7 @@ export function handleDates(body) {
 
   for (const key of Object.keys(body)) {
     const value = body[key];
-    if (isIsoDateString(value)) body[key] = new Date(value);
+    if (isIsoDateString(value)) body[key] = new moment(value);
     else if (typeof value === "object") handleDates(value);
   }
 
