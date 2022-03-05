@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card>
+    <v-card v-if="user">
       <v-card-title>{{ user.name }}</v-card-title>
       <v-card-actions>
         <v-btn color="red" text to="/logout"> Logout </v-btn>
