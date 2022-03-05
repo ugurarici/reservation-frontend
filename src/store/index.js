@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import VuexPersistence from "vuex-persist";
-import axios from "axios";
+import axios from "../api";
 import router from "../router";
 
 const vuexLocal = new VuexPersistence({
@@ -44,7 +44,7 @@ export default new Vuex.Store({
     logout({ commit }) {
       if (this.state.loggedInUser) {
         axios
-          .post("http://localhost/api/logout")
+          .post("logout")
           .then(() => {
             commit("deleteLoggedInUser");
           })
