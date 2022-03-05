@@ -5,6 +5,7 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import axios from "axios";
+import { handleDates } from "./helpers/handledates";
 
 // Add a request interceptor
 axios.interceptors.request.use(
@@ -24,6 +25,7 @@ axios.interceptors.request.use(
 // Add a response interceptor
 axios.interceptors.response.use(
   function (response) {
+    handleDates(response.data);
     return response;
   },
   function (error) {
