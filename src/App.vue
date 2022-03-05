@@ -38,7 +38,9 @@
 
       <v-btn to="/profile" class="ml-2" text v-if="loggedInUser">
         <v-icon>mdi-account</v-icon>
-        <span class="ml-2">{{ loggedInUser.name }}</span>
+        <span class="ml-2"
+          >{{ loggedInUser.name }} <small>{{ loggedInUser.created_at }}</small>
+        </span>
       </v-btn>
 
       <v-btn to="/logout" class="ml-2" text v-if="loggedInUser">

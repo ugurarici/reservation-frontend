@@ -13,4 +13,6 @@ export function handleDates(body) {
     if (isIsoDateString(value)) body[key] = new Date(value);
     else if (typeof value === "object") handleDates(value);
   }
+
+  return body;
 }
