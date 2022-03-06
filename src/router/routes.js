@@ -1,5 +1,5 @@
 import Home from "../views/Home.vue";
-import ReservationForm from "../views/ReservationForm.vue";
+import Reservation from "../views/Reservation.vue";
 import Register from "../views/Register.vue";
 import Login from "../views/Login.vue";
 import Logout from "../views/Logout.vue";
@@ -21,8 +21,8 @@ export default [
   },
   {
     path: "/form",
-    name: "ReservationForm",
-    component: ReservationForm,
+    name: "Reservation",
+    component: Reservation,
   },
   {
     path: "/register",
