@@ -92,7 +92,59 @@
           </v-card>
         </v-col>
 
-        <v-col cols="12" sm="8"> listesi </v-col>
+        <v-col cols="12" sm="8">
+          <template v-if="loggedInUser">
+            <v-card v-if="usersReservations.data.length > 0">
+              <v-card-title>
+                <v-icon left>mdi-calendar-clock</v-icon>
+                Reservations
+              </v-card-title>
+              <v-card-text>
+                <v-list>
+                  <v-list-item
+                    v-for="reservation in reservationsToList"
+                    :key="reservation.id"
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title
+                        :class="{ is_past: reservation.is_past }"
+                      >
+                        {{ reservation.name }}
+                      </v-list-item-title>
+                      <v-list-item-subtitle>
+                        {{
+                          reservation.reservation_at.format("DD.MM.YYYY HH:mm")
+                        }}
+                        -
+                        {{ reservation.reservation_at.fromNow() }}
+                      </v-list-item-subtitle>
+                      <v-list-item-subtitle v-if="reservation.email">
+                        {{ reservation.email }}
+                      </v-list-item-subtitle>
+                      <v-list-item-subtitle v-if="reservation.phone">
+                        {{ reservation.phone }}
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-card-text>
+            </v-card>
+          </template>
+          <template v-else>
+            <v-card>
+              <v-card-title>
+                Register and follow up your reservations
+              </v-card-title>
+              <v-card-text>
+                By registering you can check your past and future reservations.
+              </v-card-text>
+              <v-card-actions>
+                <v-btn to="/register" color="primary">Register Now</v-btn>
+                <v-btn to="/login" color="primary" text>Login</v-btn>
+              </v-card-actions>
+            </v-card>
+          </template>
+        </v-col>
       </v-row>
     </v-container>
   </div>
@@ -100,6 +152,8 @@
 
 <script>
 import axios from "../api";
+import { mapState } from "vuex";
+import moment from "moment";
 
 export default {
   data() {
@@ -116,6 +170,7 @@ export default {
       selectedHour: 0,
       reservationSucceded: false,
       lastReservation: null,
+      usersReservations: { data: [] },
     };
   },
   methods: {
@@ -126,6 +181,19 @@ export default {
         .get("reservations/create?date=" + this.date)
         .then((response) => {
           this.hours = response.data;
+          this.loading = false;
+        })
+        .catch((error) => {
+          this.$store.commit("addError", error.message);
+          this.loading = false;
+        });
+    },
+    fetchUsersReservations(page = 1) {
+      this.loading = true;
+      axios
+        .get("reservations?page=" + page)
+        .then((response) => {
+          this.usersReservations = response.data;
           this.loading = false;
         })
         .catch((error) => {
@@ -151,6 +219,7 @@ export default {
           this.fetchAvailableHoursOfDate();
           this.loading = false;
           this.reservationSucceded = true;
+          this.fetchUsersReservations();
         })
         .catch((error) => {
           this.loading = false;
@@ -166,15 +235,27 @@ export default {
     },
   },
   computed: {
+    ...mapState(["loggedInUser"]),
     availableHours() {
       return this.hours.map((hour) => hour + ":00");
     },
     datetime() {
       return this.date + " " + this.availableHours[this.selectedHour] + ":00";
     },
+    reservationsToList() {
+      return this.usersReservations.data.map((reservation) => {
+        reservation.is_past = moment().isAfter(reservation.reservation_at);
+        return reservation;
+      });
+    },
   },
   beforeMount() {
     this.fetchAvailableHoursOfDate();
+    if (this.loggedInUser) {
+      this.name = this.loggedInUser.name;
+      this.email = this.loggedInUser.email;
+      this.fetchUsersReservations();
+    }
   },
   watch: {
     date() {
@@ -184,3 +265,10 @@ export default {
   },
 };
 </script>
+
+<style>
+.is_past {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+</style>
