@@ -85,6 +85,7 @@
             </v-card-text>
 
             <v-card-actions>
+              <!-- TODO: instead of running createReservation on click button, creat a form and trigger it on form submit -->
               <v-btn color="primary" text @click="createReservation">
                 Reserve
               </v-btn>
@@ -125,6 +126,18 @@
                         {{ reservation.phone }}
                       </v-list-item-subtitle>
                     </v-list-item-content>
+                    <v-list-item-action v-if="!reservation.is_past">
+                      <v-list-item-action-text>
+                        <v-btn
+                          icon
+                          color="error"
+                          class="mr-2"
+                          @click="deleteReservation(reservation.id)"
+                        >
+                          <v-icon>mdi-delete</v-icon>
+                        </v-btn>
+                      </v-list-item-action-text>
+                    </v-list-item-action>
                   </v-list-item>
                 </v-list>
               </v-card-text>
@@ -212,14 +225,17 @@ export default {
         })
         .then((response) => {
           this.lastReservation = response.data;
-          this.name = null;
-          this.email = null;
-          this.phone = null;
           this.selectedHour = 0;
           this.fetchAvailableHoursOfDate();
           this.loading = false;
           this.reservationSucceded = true;
-          this.fetchUsersReservations();
+          if (this.loggedInUser) {
+            this.fetchUsersReservations();
+          } else {
+            this.name = null;
+            this.email = null;
+            this.phone = null;
+          }
         })
         .catch((error) => {
           this.loading = false;
@@ -232,6 +248,32 @@ export default {
             this.$store.commit("addError", error.message);
           }
         });
+    },
+    deleteReservation(id) {
+      //  add a confirmation dialog
+      if (confirm("Are you sure?")) {
+        this.loading = true;
+        axios
+          .delete("reservations/" + id)
+          .then(() => {
+            this.loading = false;
+            this.fetchAvailableHoursOfDate();
+            if (this.loggedInUser) {
+              this.fetchUsersReservations();
+            }
+          })
+          .catch((error) => {
+            this.loading = false;
+            if (error.response) {
+              this.$store.commit(
+                "addError",
+                "Try again :( \n" + error.response.data.message
+              );
+            } else {
+              this.$store.commit("addError", error.message);
+            }
+          });
+      }
     },
   },
   computed: {
