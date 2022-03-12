@@ -22,6 +22,10 @@ router.beforeEach((to, from, next) => {
     next("/");
   }
 
+  if (to.meta.requiresAdmin && !store.state.loggedInUser.is_admin) {
+    next("/");
+  }
+
   next();
 });
 

@@ -4,6 +4,7 @@ import Register from "../views/Register.vue";
 import Login from "../views/Login.vue";
 import Logout from "../views/Logout.vue";
 import Profile from "../views/Profile.vue";
+import AdminReservations from "../views/Admin/Reservations.vue";
 
 export default [
   {
@@ -47,5 +48,11 @@ export default [
     name: "Profile",
     component: Profile,
     meta: { requiresAuth: true },
+  },
+  {
+    path: "/admin/reservations",
+    name: "AdminReservations",
+    component: AdminReservations,
+    meta: { requiresAuth: true, requiresAdmin: true },
   },
 ];

@@ -32,6 +32,16 @@
           <v-icon>mdi-calendar</v-icon>
           <span class="ml-2">Reservation</span>
         </v-btn>
+
+        <v-btn
+          to="/admin/reservations"
+          class="ml-2"
+          text
+          v-if="loggedInUser && loggedInUser.is_admin"
+        >
+          <v-icon>mdi-calendar</v-icon>
+          <span class="ml-2">Manage Reservations</span>
+        </v-btn>
       </div>
 
       <v-spacer></v-spacer>
