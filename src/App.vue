@@ -103,5 +103,14 @@ export default {
   computed: {
     ...mapState(["errors", "loggedInUser"]),
   },
+  mounted() {
+    window.addEventListener("blur", function () {
+      window.oldTitle = document.title;
+      document.title = "NERE GİTTİN YİENİM YAV???";
+    });
+    window.addEventListener("focus", function () {
+      document.title = window.oldTitle;
+    });
+  },
 };
 </script>
